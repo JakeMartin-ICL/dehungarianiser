@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="HungarianHighlightingCompoundName" xml:space="preserve">
+        <value>ReSharper SDK: HungarianHighlighting.CompoundItemName</value>
+    </data>
+    <data name="HungarianHighlightingTitle" xml:space="preserve">
+        <value>ReSharper SDK: HungarianHighlighting.Title</value>
+    </data>
+    <data name="HungarianHighlightingDescription" xml:space="preserve">
+        <value>ReSharper SDK: HungarianHighlighting.Description</value>
+    </data>
+    <data name="HungarianHighlightingToolTipFormat" xml:space="preserve">
+        <value>ReSharper SDK: HungarianHighlighting.ToolTipFormat</value>
+    </data>
+    <data name="HungarianHighlightingToolTip" xml:space="preserve">
+        <value>ReSharper SDK: HungarianHighlighting.ToolTip</value>
+    </data>
+    <data name="HungarianHighlightingErrorStripeToolTip" xml:space="preserve">
+        <value>ReSharper SDK: HungarianHighlighting.ErrorStripeToolTip</value>
+    </data>
+    <data name="HungarianQuickFixText" xml:space="preserve">
+        <value>ReSharper SDK: HungarianQuickFix.Text</value>
+    </data>
+</root>
