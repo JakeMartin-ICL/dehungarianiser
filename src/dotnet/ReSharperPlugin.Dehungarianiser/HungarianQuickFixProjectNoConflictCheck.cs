@@ -18,16 +18,16 @@ using JetBrains.Util;
 namespace ReSharperPlugin.Dehungarianiser;
 
 [QuickFix]
-public class HungarianQuickFixProject : QuickFixBase
+public class HungarianQuickFixProjectNoConflictCheck : QuickFixBase
 {
     private readonly ICSharpDeclaration _declaration;
 
-    public HungarianQuickFixProject(ICSharpDeclaration declaration)
+    public HungarianQuickFixProjectNoConflictCheck(ICSharpDeclaration declaration)
     {
         _declaration = declaration;
     }
 
-    public override string Text => "Remove hungarian notation in project";
+    public override string Text => "Remove hungarian notation in project (no conflict check)";
 
     public override bool IsAvailable(IUserDataHolder cache)
     {
@@ -38,7 +38,7 @@ public class HungarianQuickFixProject : QuickFixBase
     {
         IProject project = _declaration.GetProject();
         
-        Action<ITextControl> textControl = Renamer.RemoveHungarianNotationInProject(project, solution, progress, true);
+        Action<ITextControl> textControl = Renamer.RemoveHungarianNotationInProject(project, solution, progress, false);
         
         progress.Stop();
         

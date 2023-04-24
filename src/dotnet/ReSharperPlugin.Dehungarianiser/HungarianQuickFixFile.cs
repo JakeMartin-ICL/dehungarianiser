@@ -16,6 +16,7 @@ using JetBrains.Util;
 
 namespace ReSharperPlugin.Dehungarianiser;
 
+[QuickFix]
 public class HungarianQuickFixFile : QuickFixBase
 {
     private readonly ICSharpDeclaration _declaration;
@@ -36,8 +37,6 @@ public class HungarianQuickFixFile : QuickFixBase
     {
         IFile file = _declaration.GetContainingFile();
         
-        Renamer.RemoveHungarianNotationInFile(file);
-
-        return null;
+        return Renamer.RemoveHungarianNotationInFile(file, solution);
     }
 }

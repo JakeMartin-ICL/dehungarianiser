@@ -37,9 +37,7 @@ public class HungarianQuickFix : QuickFixBase
     {
         //var declaredElement = _declaration.DeclaredElement.NotNull();
         
-        Renamer.RenameDeclaredElement(_declaration, _declaration.GetType() == typeof(IFieldDeclaration));
-
-        return null;
+        return Renamer.RenameDeclaredElement(_declaration, _declaration.GetType() == typeof(IFieldDeclaration), solution);
     }
 
 
