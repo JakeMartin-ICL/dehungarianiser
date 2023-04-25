@@ -1,14 +1,14 @@
 <idea-plugin require-restart="true">
   <id>com.jetbrains.rider.plugins.dehungarianiser</id>
   <name>Dehungarianiser</name>
-  <version>1.0.1</version>
-  <vendor url="https://project-url">Jake Martin</vendor>
+  <version>1.0.2</version>
+  <vendor url="https://github.com/JakeMartin-ICL/dehungarianiser">Jake Martin</vendor>
   <idea-version since-build="_PLACEHOLDER_" until-build="_PLACEHOLDER_" />
   <depends>com.intellij.modules.rider</depends>
 
   <description>
 <![CDATA[
-<p>Sample description</p>
+<p>A simple plugin to highlight and remove Hungarian notation</p>
 ]]>
   </description>
 
