@@ -26,6 +26,11 @@ public class HungarianQuickFixProject : QuickFixBase
     {
         _declaration = declaration;
     }
+    
+    public HungarianQuickFixProject(HungarianHighlighting highlighting)
+    {
+        _declaration = highlighting.Declaration;
+    }
 
     public override string Text => "Remove hungarian notation in project";
 

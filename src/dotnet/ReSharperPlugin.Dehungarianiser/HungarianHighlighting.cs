@@ -1,3 +1,4 @@
+using JetBrains.Application.I18n;
 using JetBrains.Diagnostics;
 using JetBrains.DocumentModel;
 using JetBrains.ReSharper.Feature.Services.Daemon;
@@ -15,7 +16,7 @@ namespace ReSharperPlugin.Dehungarianiser;
     Title: "Hungarian notation should be removed",
     TitleResourceType: typeof(Resources),
     TitleResourceName: nameof(Resources.HungarianHighlightingTitle),
-    Description: "Hungarian notation is considered bad practice and should be removed.",
+    Description: "Hungarian notation is considered bad practice and should be removed",
     DescriptionResourceType: typeof(Resources),
     DescriptionResourceName: nameof(Resources.HungarianHighlightingDescription),
     DefaultSeverity: Severity.WARNING)]
@@ -23,12 +24,16 @@ namespace ReSharperPlugin.Dehungarianiser;
     SeverityId,
     CSharpLanguage.Name,
     OverlapResolve = OverlapResolveKind.ERROR,
-    OverloadResolvePriority = 0,
-    ToolTipFormatStringResourceType = typeof(Resources),
-    ToolTipFormatStringResourceName = nameof(Resources.HungarianHighlightingToolTipFormat))]
+    OverloadResolvePriority = 0)]
 public class HungarianHighlighting : IHighlighting
 {
     public const string SeverityId = "Sample"; // Appears in suppression comments
+
+    private const string Message = "Hungarian notation is considered bad practice and should be removed";
+
+    public string ToolTip => Message.NON_LOCALIZABLE();
+    
+    public string ErrorStripeToolTip => ToolTip;
 
     public HungarianHighlighting(ICSharpDeclaration declaration)
     {
@@ -46,7 +51,4 @@ public class HungarianHighlighting : IHighlighting
     {
         return Declaration.NameIdentifier.NotNull().GetHighlightingRange();
     }
-
-    public string ToolTip => Resources.HungarianHighlightingToolTipFormat; // Can be used with string.Format
-    public string ErrorStripeToolTip => Resources.HungarianHighlightingErrorStripeToolTip;
 }

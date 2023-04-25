@@ -25,6 +25,11 @@ public class HungarianQuickFixFile : QuickFixBase
     {
         _declaration = declaration;
     }
+    
+    public HungarianQuickFixFile(HungarianHighlighting highlighting)
+    {
+        _declaration = highlighting.Declaration;
+    }
 
     public override string Text => "Remove hungarian notation in file";
 

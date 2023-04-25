@@ -26,6 +26,11 @@ public class HungarianQuickFixProjectNoConflictCheck : QuickFixBase
     {
         _declaration = declaration;
     }
+    
+    public HungarianQuickFixProjectNoConflictCheck(HungarianHighlighting highlighting)
+    {
+        _declaration = highlighting.Declaration;
+    }
 
     public override string Text => "Remove hungarian notation in project (no conflict check)";
 

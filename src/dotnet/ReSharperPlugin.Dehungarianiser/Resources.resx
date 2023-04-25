@@ -27,15 +27,6 @@
     <data name="HungarianHighlightingDescription" xml:space="preserve">
         <value>ReSharper SDK: HungarianHighlighting.Description</value>
     </data>
-    <data name="HungarianHighlightingToolTipFormat" xml:space="preserve">
-        <value>ReSharper SDK: HungarianHighlighting.ToolTipFormat</value>
-    </data>
-    <data name="HungarianHighlightingToolTip" xml:space="preserve">
-        <value>ReSharper SDK: HungarianHighlighting.ToolTip</value>
-    </data>
-    <data name="HungarianHighlightingErrorStripeToolTip" xml:space="preserve">
-        <value>ReSharper SDK: HungarianHighlighting.ErrorStripeToolTip</value>
-    </data>
     <data name="HungarianQuickFixText" xml:space="preserve">
         <value>ReSharper SDK: HungarianQuickFix.Text</value>
     </data>
