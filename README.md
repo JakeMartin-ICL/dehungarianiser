@@ -5,6 +5,12 @@
 
 This plugin highlights declarations of variables using Hungarian notation and offers a quick fix to remove the Hungarian notation and executes the rename refactoring. This can be applied to a single variable or to the entire file or project.
 
+## Usage
+
+Once installed, Dehungarianiser will highlight instances of Hungarian notation. A provided quick action (accessed by clicking the lightbulb or alt+enter) can then be used to remove the hungarian notation. This is context aware, so a field `mblnExample` will become `Example`, while a parameter `pblnExample` will become `example`. Rider will also inform you of any conflicts, allowing you to rename these manually afterward.
+
+In addition, there are also quick actions for removing all the Hungarian notation in the file or project. In a large project the conflict checking is rather slow, so this can be skipped - your IDE and the compiler should detect these afterwards regardless.
+
 ## What is Hungarian notation?
 
 Hungarian notation is the practice of preceding variable names with hints about the type of the variable. For example, instead of `var people = new List<Person>`, the variable would be named `plstPeople`. The `p` indicates it's a local variable (or parameter), while the `lst` part indicates it's a list.
@@ -12,6 +18,8 @@ Hungarian notation is the practice of preceding variable names with hints about 
 ### Notation standard
 
 This plugin currently detects only one Hungarian notation standard - `p` for parameter/local or `m` for field, followed by a type shorthand such as `bln`, `lst`, `dbl`, etc.
+
+The currently detected type prefixes are: `act`, `arr`, `b`, `bl`, `bln`, `bool`, `dbl`, `dct`, `dic`, `dict`, `div`, `dt`, `fn`, `fun`, `hash`, `hsh`, `ih`, `int`, `list`, `lng`, `long`, `lst`, `obj`, `row`, `sb`, `str`, `ts`.
 
 This is subject to change, possibly with support for custom standards in future.
 

@@ -8,7 +8,28 @@
 
   <description>
 <![CDATA[
-<p>A simple plugin to highlight and remove Hungarian notation</p>
+<p>This plugin highlights declarations of variables using Hungarian notation and offers a quick fix to remove the Hungarian notation and executes the rename refactoring. This can be applied to a single variable or to the entire file or project.</p>
+<h2 id="usage">Usage</h2>
+<p>Once installed, Dehungarianiser will highlight instances of Hungarian notation. A provided quick action (accessed by clicking the lightbulb or alt+enter) can then be used to remove the hungarian notation. This is context aware, so a field <code>mblnExample</code> will become <code>Example</code>, while a parameter <code>pblnExample</code> will become <code>example</code>. Rider will also inform you of any conflicts, allowing you to rename these manually afterward.</p>
+<p>In addition, there are also quick actions for removing all the Hungarian notation in the file or project. In a large project the conflict checking is rather slow, so this can be skipped - your IDE and the compiler should detect these afterwards regardless.</p>
+<h2 id="what-is-hungarian-notation-">What is Hungarian notation?</h2>
+<p>Hungarian notation is the practice of preceding variable names with hints about the type of the variable. For example, instead of <code>var people = new List&lt;Person&gt;</code>, the variable would be named <code>plstPeople</code>. The <code>p</code> indicates it&#39;s a local variable (or parameter), while the <code>lst</code> part indicates it&#39;s a list.</p>
+<h3 id="notation-standard">Notation standard</h3>
+<p>This plugin currently detects only one Hungarian notation standard - <code>p</code> for parameter/local or <code>m</code> for field, followed by a type shorthand such as <code>bln</code>, <code>lst</code>, <code>dbl</code>, etc.</p>
+<p>The currently detected type prefixes are: <code>act</code>, <code>arr</code>, <code>b</code>, <code>bl</code>, <code>bln</code>, <code>bool</code>, <code>dbl</code>, <code>dct</code>, <code>dic</code>, <code>dict</code>, <code>div</code>, <code>dt</code>, <code>fn</code>, <code>fun</code>, <code>hash</code>, <code>hsh</code>, <code>ih</code>, <code>int</code>, <code>list</code>, <code>lng</code>, <code>long</code>, <code>lst</code>, <code>obj</code>, <code>row</code>, <code>sb</code>, <code>str</code>, <code>ts</code>.</p>
+<p>This is subject to change, possibly with support for custom standards in future.</p>
+<h2 id="why-remove-hungarian-notation-">Why remove Hungarian notation?</h2>
+<p>Hungarian notation is widely regarded as a bad idea. Though it originally served a purpose in times before strongly typed languages and IDEs, it has no place in modern codebases.</p>
+<ul>
+<li>It&#39;s confusing - It makes code harder to read/understand, especially for developers who don&#39;t use it, such as developers new to a codebase</li>
+<li>It&#39;s redundant - Variable name, context and IDEs all give the type in better ways anyway</li>
+<li>It&#39;s inconsistent - People frequently do it differently and/or incorrectly</li>
+<li>It&#39;s limiting - Changing the type of a variable also requires a name change or leaves the name incorrect</li>
+<li>It&#39;s verbose - It makes variable names unpronounceable and makes the code overall longer, meaning more to read</li>
+<li>It&#39;s unnecessary - C# is a typed language anyway, even without all the type info you can&#39;t really do something illegal accidentally</li>
+<li>It can be misleading - If the type has changed or the name is wrong, developers can be misled by the name</li>
+<li>It&#39;s distracting - Similar to points 1 and 5, however it&#39;s important to stress that it really does distract from the important code</li>
+</ul>
 ]]>
   </description>
 
