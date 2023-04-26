@@ -58,7 +58,7 @@ namespace ReSharperPlugin.Dehungarianiser
     public static string HungarianQuickFixText => ResourceManager.GetString("HungarianQuickFixText");
     
     public static string PatternString =
-      "\\b((p)|(?<field>m))(int|str|lst|dt|lng|dbl|dict|b|fn|div|hsh|hash|arr|row|dct|ih|ts|act)?(?<startingcaps>[A-Z]+)(?<rest>\\w+)?";
+      "\\b((p)|(?<field>m))(act|arr|b|bl|bln|bool|dbl|dct|dic|dict|div|dt|fn|fun|hash|hsh|ih|int|lng|long|list|lst|obj|row|sb|str|ts)?(?<startingcaps>[A-Z]+)(?<rest>\\w+)?";
     public static Regex RegexPattern = new Regex(PatternString);
   }
 }
