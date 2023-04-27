@@ -40,12 +40,6 @@ public class HungarianQuickFix : QuickFixBase
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-        //var declaredElement = _declaration.DeclaredElement.NotNull();
-        
-        return Renamer.RenameDeclaredElement(_declaration, _declaration.GetType() == typeof(IFieldDeclaration), solution);
+        return Renamer.RenameDeclaredElement(_declaration, solution);
     }
-
-
-
-
 }

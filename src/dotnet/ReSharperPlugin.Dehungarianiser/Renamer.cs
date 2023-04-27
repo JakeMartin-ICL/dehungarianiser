@@ -6,28 +6,54 @@ using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Refactorings.Specific.Rename;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.Psi.CSharp.Tree;
-using JetBrains.ReSharper.Psi.ExtensionsAPI.Resolve;
+using JetBrains.ReSharper.Psi.Naming;
+using JetBrains.ReSharper.Psi.Naming.Impl;
+using JetBrains.ReSharper.Psi.Naming.Interfaces;
+using JetBrains.ReSharper.Psi.Naming.Settings;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.Psi.Tree;
-using JetBrains.ReSharper.Refactorings.Rename;
 using JetBrains.TextControl;
 
 namespace ReSharperPlugin.Dehungarianiser;
 
 public static class Renamer
 {
-    public static Action<ITextControl> RenameDeclaredElement(IDeclaration declaration, bool field, ISolution solution)
+    public static Action<ITextControl> RenameDeclaredElement(IDeclaration declaration, ISolution solution)
     {
         IDeclaredElement declaredElement = declaration.DeclaredElement;
         if (declaredElement == null) return null;
         Match match = Resources.RegexPattern.Match(declaration.DeclaredName);
         if (!match.Success) return null;
-        string newName = NewName(match, field);
+        string newName = NewName(match);
+
+        string fixedName = FixupName(declaration, newName);
 
         return textControl => RenameRefactoringService.Rename(solution,
-            new RenameDataProvider(declaredElement, newName), textControl);
+            new RenameDataProvider(declaredElement, fixedName), textControl);
+    }
+
+    private static string FixupName(IDeclaration declaration, string newName)
+    {
+        IDeclaredElement declaredElement = declaration.DeclaredElement;
+        if (declaredElement == null) return newName;
+        INamingPolicyProvider namingPolicyProvider = declaration.GetPsiServices().Naming.Policy
+            .GetPolicyProvider(declaration.GetKnownLanguage(), declaration.GetSourceFile());
+        NamingPolicy policy = namingPolicyProvider.GetPolicy(declaredElement);
+        NamingManager naming = declaredElement.GetPsiServices().Naming;
+        Name name = naming.Parsing.Parse(newName, policy.NamingRule, namingPolicyProvider);
+        if (!name.HasErrors || declaredElement is IOverridableMember overridableMember &&
+            overridableMember.GetAccessRights() == AccessRights.PUBLIC &&
+            overridableMember.GetRootSuperMembers().Count > 0)
+            return newName;
+        if (policy.ExtraRules.Any(
+                extraRule => !naming.Parsing.Parse(newName, extraRule, namingPolicyProvider).HasErrors))
+        {
+            return newName;
+        }
+
+        string canonicalName = name.GetCanonicalName();
+        return canonicalName == string.Empty ? newName : canonicalName;
     }
 
     private static void QuickRename(IDeclaration declaration, string newName)
@@ -51,19 +77,18 @@ public static class Renamer
             reference.BindTo(declaredElement);
     }
 
-    private static string NewName(Match match, bool field)
+    private static string NewName(Match match)
     {
-        string startingCaps = match.Groups["startingcaps"].Value;
-        string restOfTheName = match.Groups["rest"].Value;
-        restOfTheName = restOfTheName switch
+        string basename = match.Groups["basename"].Value;
+        basename = basename switch
         {
-            "arams" => "arameters",
-            "eturn" => "esult",
-            "efault" => "efaultValue",
-            _ => restOfTheName
+            "Params" => "parameters",
+            "Return" => "result",
+            "Default" => "defaultValue",
+            _ => basename
         };
-        string newName = (field ? startingCaps.ToUpper() : startingCaps.ToLower()) + restOfTheName;
-        return newName;
+
+        return basename;
     }
 
     public static Action<ITextControl> RemoveHungarianNotationInFile(IFile file, ISolution solution)
@@ -76,31 +101,16 @@ public static class Renamer
 
     private static Dictionary<IDeclaredElement, string> GetRenamesForFile(IFile file)
     {
-        TreeNodeExtensions.FilteredDescendantsEnumerator<ILocalVariableDeclaration> localVarDeclarations =
-            file.Descendants<ILocalVariableDeclaration>();
-        TreeNodeExtensions.FilteredDescendantsEnumerator<IParameterDeclaration> parameterDeclarations =
-            file.Descendants<IParameterDeclaration>();
-        TreeNodeExtensions.FilteredDescendantsEnumerator<IFieldDeclaration> fieldDeclarations =
-            file.Descendants<IFieldDeclaration>();
+        TreeNodeExtensions.FilteredDescendantsEnumerator<IDeclaration> declarations =
+            file.Descendants<IDeclaration>();
 
         var newNames = new Dictionary<IDeclaredElement, string>();
 
-        foreach (ILocalVariableDeclaration dec in localVarDeclarations)
+        foreach (IDeclaration declaration in declarations)
         {
-            Match match = Resources.RegexPattern.Match(dec.DeclaredName);
-            if (match.Success) newNames.Add(dec.DeclaredElement, NewName(match, false));
-        }
-
-        foreach (IParameterDeclaration dec in parameterDeclarations)
-        {
-            Match match = Resources.RegexPattern.Match(dec.DeclaredName);
-            if (match.Success && dec.DeclaredElement != null) newNames.Add(dec.DeclaredElement, NewName(match, false));
-        }
-
-        foreach (IFieldDeclaration dec in fieldDeclarations)
-        {
-            Match match = Resources.RegexPattern.Match(dec.DeclaredName);
-            if (match.Success && dec.DeclaredElement != null) newNames.Add(dec.DeclaredElement, NewName(match, true));
+            Match match = Resources.RegexPattern.Match(declaration.DeclaredName);
+            if (declaration.DeclaredElement != null && match.Success)
+                newNames.Add(declaration.DeclaredElement, FixupName(declaration, NewName(match)));
         }
 
         return newNames;
