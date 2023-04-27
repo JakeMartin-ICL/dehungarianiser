@@ -19,7 +19,7 @@ namespace ReSharperPlugin.Dehungarianiser;
 
 public static class Dehungarianiser
 {
-    private const string PatternString = "\\b[pm](act|arr|b|bl|bln|bool|dbl|dct|dic|dict|div|dt|fn|fun|hash|hsh|ih|int|lng|long|list|lst|obj|row|sb|str|ts)?(?<basename>([A-Z]+)(\\w+)?)";
+    private const string PatternString = "\\b_?[pm](act|arr|b|bl|bln|bool|dbl|dct|dic|dict|div|dt|fn|fun|hash|hsh|ih|int|lng|long|list|lst|obj|row|sb|str|ts)?(?<basename>[A-Z]+\\w*)";
     public static readonly Regex RegexPattern = new(PatternString);
     
     public static Action<ITextControl> RenameDeclaredElement(IDeclaration declaration, ISolution solution)

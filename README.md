@@ -17,6 +17,9 @@ In addition, there are also quick actions for removing all the Hungarian notatio
 project the conflict checking is rather slow, so this can be skipped - your IDE and the compiler should detect these
 afterwards regardless.
 
+**Important:** The renaming will adhere to your current naming policy. As a result, `mID` will become `Id` unless you
+ensure 'ID' is added to Rider's list of abbreviations. 
+
 ## What is Hungarian notation?
 
 Hungarian notation is the practice of preceding variable names with hints about the type of the variable. For example,

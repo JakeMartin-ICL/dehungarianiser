@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 1.2.0
 
 - Improved renaming - the quick action will now correctly rename all types of declarations
+- Improved detection - now detect private properties with hungarian notation (eg. `_plstExample`)
 
 ## 1.1.0
 
