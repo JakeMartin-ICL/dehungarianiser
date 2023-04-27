@@ -9,17 +9,17 @@ namespace ReSharperPlugin.Dehungarianiser;
 
 [RegisterConfigurableSeverity(
     SeverityId,
-    CompoundItemName: null,
-    CompoundItemNameResourceType: null,
-    CompoundItemNameResourceName: null,
-    Group: HighlightingGroupIds.CodeSmell,
-    Title: "Hungarian notation should be removed",
-    TitleResourceType: typeof(Resources),
-    TitleResourceName: nameof(Resources.HungarianHighlightingTitle),
-    Description: "Hungarian notation is considered bad practice and should be removed",
-    DescriptionResourceType: typeof(Resources),
-    DescriptionResourceName: nameof(Resources.HungarianHighlightingDescription),
-    DefaultSeverity: Severity.WARNING)]
+    null,
+    null,
+    null,
+    HighlightingGroupIds.CodeSmell,
+    "Hungarian notation should be removed",
+    typeof(Resources),
+    nameof(Resources.HungarianHighlightingTitle),
+    "Hungarian notation is considered bad practice and should be removed",
+    typeof(Resources),
+    nameof(Resources.HungarianHighlightingDescription),
+    Severity.WARNING)]
 [ConfigurableSeverityHighlighting(
     SeverityId,
     CSharpLanguage.Name,
@@ -31,16 +31,16 @@ public class HungarianHighlighting : IHighlighting
 
     private const string Message = "Hungarian notation is considered bad practice and should be removed";
 
-    public string ToolTip => Message.NON_LOCALIZABLE();
-    
-    public string ErrorStripeToolTip => ToolTip;
-
     public HungarianHighlighting(ICSharpDeclaration declaration)
     {
         Declaration = declaration;
     }
 
     public ICSharpDeclaration Declaration { get; }
+
+    public string ToolTip => Message.NON_LOCALIZABLE();
+
+    public string ErrorStripeToolTip => ToolTip;
 
     public bool IsValid()
     {

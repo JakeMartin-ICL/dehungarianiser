@@ -1,16 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using JetBrains.Application.Progress;
-using JetBrains.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.QuickFixes;
-using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
-using JetBrains.ReSharper.Psi.ExtensionsAPI.Resolve;
-using JetBrains.ReSharper.Psi.Resolve;
-using JetBrains.ReSharper.Psi.Search;
-using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.TextControl;
 using JetBrains.Util;
 
@@ -40,6 +32,6 @@ public class HungarianQuickFix : QuickFixBase
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-        return Renamer.RenameDeclaredElement(_declaration, solution);
+        return Dehungarianiser.RenameDeclaredElement(_declaration, solution);
     }
 }

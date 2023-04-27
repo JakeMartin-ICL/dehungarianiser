@@ -1,16 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using JetBrains.Application.Progress;
-using JetBrains.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.QuickFixes;
-using JetBrains.ReSharper.I18n.Services;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
-using JetBrains.ReSharper.Psi.ExtensionsAPI.Resolve;
-using JetBrains.ReSharper.Psi.Resolve;
-using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.TextControl;
 using JetBrains.Util;
@@ -26,7 +18,7 @@ public class HungarianQuickFixProjectNoConflictCheck : QuickFixBase
     {
         _declaration = declaration;
     }
-    
+
     public HungarianQuickFixProjectNoConflictCheck(HungarianHighlighting highlighting)
     {
         _declaration = highlighting.Declaration;
@@ -42,11 +34,11 @@ public class HungarianQuickFixProjectNoConflictCheck : QuickFixBase
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
         IProject project = _declaration.GetProject();
-        
-        Action<ITextControl> textControl = Renamer.RemoveHungarianNotationInProject(project, solution, progress, false);
-        
+
+        Action<ITextControl> textControl = Dehungarianiser.RemoveHungarianNotationInProject(project, solution, progress, false);
+
         progress.Stop();
-        
+
         return textControl;
     }
 }

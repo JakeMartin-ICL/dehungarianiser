@@ -1,4 +1,3 @@
-using System.Linq;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 
@@ -16,7 +15,7 @@ public class HungarianAnalyzer : ElementProblemAnalyzer<ICSharpDeclaration>
         IHighlightingConsumer consumer)
     {
         string name = element.NameIdentifier?.Name;
-        if (name == null || !Resources.RegexPattern.Match(name).Success )
+        if (name == null || !Dehungarianiser.RegexPattern.Match(name).Success)
             return;
 
         consumer.AddHighlighting(new HungarianHighlighting(element));

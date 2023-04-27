@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace ReSharperPlugin.Dehungarianiser
+﻿namespace ReSharperPlugin.Dehungarianiser
 {
   using System;
   using JetBrains.Application.I18n;
@@ -56,11 +54,5 @@ namespace ReSharperPlugin.Dehungarianiser
     public static string HungarianHighlightingTitle => ResourceManager.GetString("HungarianHighlightingTitle");
     public static string HungarianHighlightingDescription => ResourceManager.GetString("HungarianHighlightingDescription");
     public static string HungarianQuickFixText => ResourceManager.GetString("HungarianQuickFixText");
-    
-    public static string PatternString =
-      "\\b[pm](act|arr|b|bl|bln|bool|dbl|dct|dic|dict|div|dt|fn|fun|hash|hsh|ih|int|lng|long|list|lst|obj|row|sb|str|ts)?(?<basename>([A-Z]+)(\\w+)?)";
-    public static Regex RegexPattern = new Regex(PatternString);
-
-    public static string RenameError = "DEHUNGARIANISE_RENAME_ERROR";
   }
 }

@@ -17,13 +17,16 @@ using JetBrains.TextControl;
 
 namespace ReSharperPlugin.Dehungarianiser;
 
-public static class Renamer
+public static class Dehungarianiser
 {
+    private const string PatternString = "\\b[pm](act|arr|b|bl|bln|bool|dbl|dct|dic|dict|div|dt|fn|fun|hash|hsh|ih|int|lng|long|list|lst|obj|row|sb|str|ts)?(?<basename>([A-Z]+)(\\w+)?)";
+    public static readonly Regex RegexPattern = new(PatternString);
+    
     public static Action<ITextControl> RenameDeclaredElement(IDeclaration declaration, ISolution solution)
     {
         IDeclaredElement declaredElement = declaration.DeclaredElement;
         if (declaredElement == null) return null;
-        Match match = Resources.RegexPattern.Match(declaration.DeclaredName);
+        Match match = RegexPattern.Match(declaration.DeclaredName);
         if (!match.Success) return null;
         string newName = NewName(match);
 
@@ -42,15 +45,13 @@ public static class Renamer
         NamingPolicy policy = namingPolicyProvider.GetPolicy(declaredElement);
         NamingManager naming = declaredElement.GetPsiServices().Naming;
         Name name = naming.Parsing.Parse(newName, policy.NamingRule, namingPolicyProvider);
-        if (!name.HasErrors || declaredElement is IOverridableMember overridableMember &&
-            overridableMember.GetAccessRights() == AccessRights.PUBLIC &&
-            overridableMember.GetRootSuperMembers().Count > 0)
+        if (!name.HasErrors || (declaredElement is IOverridableMember overridableMember &&
+                                overridableMember.GetAccessRights() == AccessRights.PUBLIC &&
+                                overridableMember.GetRootSuperMembers().Count > 0))
             return newName;
         if (policy.ExtraRules.Any(
                 extraRule => !naming.Parsing.Parse(newName, extraRule, namingPolicyProvider).HasErrors))
-        {
             return newName;
-        }
 
         string canonicalName = name.GetCanonicalName();
         return canonicalName == string.Empty ? newName : canonicalName;
@@ -60,15 +61,15 @@ public static class Renamer
     {
         IDeclaredElement declaredElement = declaration.DeclaredElement;
         if (declaredElement == null) return;
-        Match match = Resources.RegexPattern.Match(declaration.DeclaredName);
+        Match match = RegexPattern.Match(declaration.DeclaredName);
         if (!match.Success) return;
 
         IPsiServices psiServices = declaration.GetPsiServices();
         var references = new List<IReference>();
         psiServices.Finder.FindReferences(
             declaredElement,
-            domain: psiServices.SearchDomainFactory.CreateSearchDomain(declaration.GetSolution(), false),
-            consumer: references.ConsumeReferences(),
+            psiServices.SearchDomainFactory.CreateSearchDomain(declaration.GetSolution(), false),
+            references.ConsumeReferences(),
             NullProgressIndicator.Create());
 
         declaration.SetName(newName);
@@ -108,7 +109,7 @@ public static class Renamer
 
         foreach (IDeclaration declaration in declarations)
         {
-            Match match = Resources.RegexPattern.Match(declaration.DeclaredName);
+            Match match = RegexPattern.Match(declaration.DeclaredName);
             if (declaration.DeclaredElement != null && match.Success)
                 newNames.Add(declaration.DeclaredElement, FixupName(declaration, NewName(match)));
         }
@@ -130,9 +131,7 @@ public static class Renamer
                 progress.CurrentItemText = $"Removing Hungarian notation in {file.Name}";
                 Dictionary<IDeclaredElement, string> newNamesForFile = GetRenamesForFile(file.GetPrimaryPsiFile());
                 foreach (KeyValuePair<IDeclaredElement, string> kvp in newNamesForFile)
-                {
                     QuickRename(kvp.Key.GetSingleDeclaration(), kvp.Value);
-                }
 
                 progress.Advance();
             }
