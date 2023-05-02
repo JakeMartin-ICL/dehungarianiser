@@ -19,9 +19,11 @@ namespace ReSharperPlugin.Dehungarianiser;
 
 public static class Dehungarianiser
 {
-    private const string PatternString = "\\b_?[pm](act|arr|b|bl|bln|bool|dbl|dct|dic|dict|div|dt|fn|fun|hash|hsh|ih|int|lng|long|list|lst|obj|row|sb|str|ts)?(?<basename>[A-Z]+\\w*)";
+    private const string PatternString =
+        "\\b_?[pm](act|arr|b|bl|bln|bool|dbl|dct|dic|dict|div|dt|fn|fun|hash|hsh|ih|int|lng|long|list|lst|obj|row|sb|str|ts)?(?<basename>[A-Z]+\\w*)";
+
     public static readonly Regex RegexPattern = new(PatternString);
-    
+
     public static Action<ITextControl> RenameDeclaredElement(IDeclaration declaration, ISolution solution)
     {
         IDeclaredElement declaredElement = declaration.DeclaredElement;
@@ -92,19 +94,25 @@ public static class Dehungarianiser
         return basename;
     }
 
-    public static Action<ITextControl> RemoveHungarianNotationInFile(IFile file, ISolution solution)
-    {
-        Dictionary<IDeclaredElement, string> newNames = GetRenamesForFile(file);
-
-        return textControl => RenameRefactoringService.Rename(solution,
-            new RenameDataProvider(newNames) { Model = { Bulk = true } }, textControl);
-    }
-
     private static Dictionary<IDeclaredElement, string> GetRenamesForFile(IFile file)
     {
         TreeNodeExtensions.FilteredDescendantsEnumerator<IDeclaration> declarations =
             file.Descendants<IDeclaration>();
 
+        var newNames = new Dictionary<IDeclaredElement, string>();
+
+        foreach (IDeclaration declaration in declarations)
+        {
+            Match match = RegexPattern.Match(declaration.DeclaredName);
+            if (declaration.DeclaredElement != null && match.Success)
+                newNames.Add(declaration.DeclaredElement, FixupName(declaration, NewName(match)));
+        }
+
+        return newNames;
+    }
+
+    public static Dictionary<IDeclaredElement, string> GetRenamesForDeclarations(IEnumerable<IDeclaration> declarations)
+    {
         var newNames = new Dictionary<IDeclaredElement, string>();
 
         foreach (IDeclaration declaration in declarations)
